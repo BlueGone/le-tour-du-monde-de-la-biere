@@ -3,6 +3,10 @@ import { redirect } from "next/navigation";
 
 export type BeerPageProps = { params: { slug: string } };
 
+export async function generateStaticParams () {
+  return nodes.map((node) => ({ slug: node.slug }));
+}
+
 export default function Page({ params }: BeerPageProps) {
   const node = nodes.find((node) => node.slug === params.slug);
   if (!node) {
@@ -15,14 +19,14 @@ export default function Page({ params }: BeerPageProps) {
         {node.parents?.length ? (
           node.parents.map((parent) => (
             <div className="basis-1/4 text-center" key={parent}>
-              <a className="text-middle align-middle" href={`/beer/${parent}`}>
+              <a className="text-middle align-middle" href={`./${parent}`}>
                 {parent}
               </a>
             </div>
           ))
         ) : (
           <div className="basis-1/4 text-center">
-            <a className="text-middle align-middle" href={`/`}>
+            <a className="text-middle align-middle" href={`../`}>
               Le tour du monde de la bière
             </a>
           </div>
@@ -39,7 +43,7 @@ export default function Page({ params }: BeerPageProps) {
         {node.children?.length &&
           node.children?.map((parent) => (
             <div className="basis-1/4 text-center" key={parent}>
-              <a href={`/beer/${parent}`}>{parent}</a>
+              <a href={`./${parent}`}>{parent}</a>
             </div>
           ))}
       </div>
